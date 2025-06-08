@@ -1,0 +1,77 @@
+# Cookie 配置
+COOKIES_STR: 'cna=Hsu+ILnD+kACAXSUXXUlbm/g; t=788aea19f3b2859b19dcdf49dfc0fd5b; _hvn_lgc_=77; isg=BD8_yTIja0FD7G9dHwHmzl5rzhPJJJPGh2BK5tENw-414Fxi2fRvFm-7IrAeuGs-; xlly_s=1; tracknick=xy246940070033; unb=2218021801256; havana_lgc2_77=eyJoaWQiOjIyMTgwMjE4MDEyNTYsInNnIjoiNTQ0YzQ3NWZjZjE0MDY4MTMwYmFkZjZlNDg3M2QxNWEiLCJzaXRlIjo3NywidG9rZW4iOiIxc3VmOXZXLVhhY1pzUWstX3RZeTFLdyJ9; havana_lgc_exp=1751960114068; cookie2=108b8de97a9130a6580c7f5e575f0d95; _samesite_flag_=true; sgcookie=E100QA%2FGxgeFVFT3mODjzJmm1AVeud4JZpvqY3IWh%2FEHb%2FMNhC69SxF5tXygVL0NkvB2NRIrLSWVYTxMu9uDof80i%2Bp9dXWHTG9NsG3pFtjjp4A%3D; csg=6bf940f8; _tb_token_=5f538a6866137; sdkSilent=1749462478760; mtop_partitioned_detect=1; _m_h5_tk=2d74b64969c4bcdb707e74fb5de4bd0b_1749425308818; _m_h5_tk_enc=87945e277b005764b783a16fe8278f56; tfstk=gvCsi9bcrcm_8Rdxld4EOd0xz8Rf1yPrhqTArZhZkCdtDmQJYG-w_rVXDGxF_h7w6S1Xs6WZghrMGZIyGurza77GSLAY4uRzKwX2MEF2DJJ9SDG9BurzaWytJIZ_4izYUHqBoHL9kKLYRpLWvf3ODhpKvUTkMIIvBDnpPEl9Djh9JyTDvndvMidLRE-pDjooOEe6yNaahcw7vaKRWHGxG4Y6B3FkAjhAOF_B2NUmMjCB5d1dtqHIBdWArLfNlSGH_a6p9U7g1XORWUswYgF-OBQFJiJlKocyKM1XE1pZkAQCGh9R6pgqaaOBkipfKuGy5CWBF16goDQO4h6JsZu7bw95dLYppqM9_T7PiLCT10xeEEswYgF-OBpA4YcyVOeih29oGetzRyMmnvitVNIqRauJBeY_4yaIjxv9-etzRyMmndLH5wzQRcDc.'  # 闲鱼cookie，需要手动填写
+
+# WebSocket 配置
+WEBSOCKET_URL: 'wss://wss-goofish.dingtalk.com/'
+
+# 心跳包配置
+HEARTBEAT_INTERVAL: 15  # 心跳间隔，默认15秒
+HEARTBEAT_TIMEOUT: 5    # 心跳超时，默认5秒
+
+# Token 配置
+TOKEN_REFRESH_INTERVAL: 3600  # Token刷新间隔，默认1小时
+TOKEN_RETRY_INTERVAL: 300     # Token重试间隔，默认5分钟
+
+# 消息配置
+MESSAGE_EXPIRE_TIME: 300000  # 消息过期时间，默认5分钟
+
+# API 配置
+API_ENDPOINTS:
+  login_check: 'https://passport.goofish.com/newlogin/hasLogin.do'
+  token: 'https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/'
+  message_headinfo: 'https://h5api.m.goofish.com/h5/mtop.idle.trade.pc.message.headinfo/1.0/'
+
+# 请求头配置
+DEFAULT_HEADERS:
+  accept: 'application/json'
+  accept-language: 'zh-CN,zh;q=0.9'
+  cache-control: 'no-cache'
+  origin: 'https://www.goofish.com'
+  pragma: 'no-cache'
+  priority: 'u=1, i'
+  referer: 'https://www.goofish.com/'
+  sec-ch-ua: '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"'
+  sec-ch-ua-mobile: '?0'
+  sec-ch-ua-platform: '"Windows"'
+  sec-fetch-dest: 'empty'
+  sec-fetch-mode: 'cors'
+  sec-fetch-site: 'same-site'
+  user-agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+
+# WebSocket 请求头配置
+WEBSOCKET_HEADERS:
+  Host: 'wss-goofish.dingtalk.com'
+  Connection: 'Upgrade'
+  Pragma: 'no-cache'
+  Cache-Control: 'no-cache'
+  User-Agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+  Origin: 'https://www.goofish.com'
+  Accept-Encoding: 'gzip, deflate, br, zstd'
+  Accept-Language: 'zh-CN,zh;q=0.9'
+
+# 应用配置
+APP_CONFIG:
+  app_key: '444e9908a51d1cb236a27862abc769c9'
+  api_version: '1.0'
+  platform: 'web'
+  app_version: '1.0'
+
+# 自动回复配置
+AUTO_REPLY:
+  enabled: true
+  default_message: '收到您的消息：{message}'
+  max_retry: 3
+  retry_interval: 5
+
+# 人工接管配置
+MANUAL_MODE:
+  timeout: 3600  # 人工接管超时时间，默认1小时
+  toggle_keywords: ['。']  # 切换关键词，用逗号分隔
+
+# 日志配置
+LOG_CONFIG:
+  level: 'INFO'
+  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+  rotation: '1 day'
+  retention: '7 days'
+  compression: 'zip' 
