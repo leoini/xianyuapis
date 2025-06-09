@@ -12,11 +12,33 @@ from utils.xianyu_utils import (
 from config import (
     WEBSOCKET_URL, HEARTBEAT_INTERVAL, HEARTBEAT_TIMEOUT,
     TOKEN_REFRESH_INTERVAL, TOKEN_RETRY_INTERVAL, config, COOKIES_STR,
-    MANUAL_MODE
+    MANUAL_MODE, LOG_CONFIG
 )
 from utils.message_utils import format_message, format_system_message
 from utils.ws_utils import WebSocketClient
+import sys
 
+# 日志配置
+log_dir = 'logs'
+os.makedirs(log_dir, exist_ok=True)
+log_path = os.path.join(log_dir, f"xianyu_{time.strftime('%Y-%m-%d')}.log")
+logger.remove()
+logger.add(
+    log_path,
+    rotation=LOG_CONFIG.get('rotation', '1 day'),
+    retention=LOG_CONFIG.get('retention', '7 days'),
+    compression=LOG_CONFIG.get('compression', 'zip'),
+    level=LOG_CONFIG.get('level', 'INFO'),
+    format=LOG_CONFIG.get('format', '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'),
+    encoding='utf-8',
+    enqueue=True
+)
+logger.add(
+    sys.stdout,
+    level=LOG_CONFIG.get('level', 'INFO'),
+    format=LOG_CONFIG.get('format', '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'),
+    enqueue=True
+)
 
 class XianyuLive:
     def __init__(self, cookies_str=None):
@@ -615,10 +637,7 @@ class XianyuLive:
                 await asyncio.sleep(5)  # 等待5秒后重试
                 continue
 
-
 if __name__ == '__main__':
     cookies_str = os.getenv('COOKIES_STR')
     xianyuLive = XianyuLive(cookies_str)
-
-    # 启动常驻进程，用于接收消息和自动回复
     asyncio.run(xianyuLive.main())

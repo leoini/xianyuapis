@@ -1,78 +1,58 @@
-# Cookie 配置
-# 闲鱼cookie，需要手动填写
-COOKIES_STR: 'cna=ncu+IECOwmYCAXSUXXXgt5Rv; t=66e558997fe67e4703f998a279a23133; tracknick=xy246940070033; _hvn_lgc_=77; xlly_s=1; unb=2218021801256; havana_lgc2_77=eyJoaWQiOjIyMTgwMjE4MDEyNTYsInNnIjoiMWYwZDkzNzYxZTlmZDM4YzY0YzAwZGI3ODIyZDJkYzEiLCJzaXRlIjo3NywidG9rZW4iOiIxQ3NYQ0o5SmQ3MklQd2xBX0RzSDl1QSJ9; havana_lgc_exp=1751991164602; mtop_partitioned_detect=1; _m_h5_tk=3f35f37b88c2458712e26b4af6516ef3_1749468720067; _m_h5_tk_enc=07d6c9ab7ab1348ec8ae414836bb1945; cookie2=11d0671df88ad558227555295a3450d6; _samesite_flag_=true; _tb_token_=318ee8eb13e43; sgcookie=E100Wu5XcYYjEx2phQet1QBuq9l0vU5P%2F08VJaU%2BV1Ua%2F4V3hGplDnhS%2FFPv7Ci36ZFdGG%2BdPvf7pr%2BgNJN4w3Al%2FQ9zK10IgXXMcnWYwmfVyoU%3D; csg=34eb3b98; sdkSilent=1749547362963; tfstk=gK5tghXVUkqgJU59-NynmH0IdKaHHJbaIG7SinxihMIdPaoMh1AGDxIGuivbbCfAvGjdDKzwmntAmZ6g-7Vl7NR2GjEuZ7bVwa8N6niDGCRBa3RED7Vl7NgM5zbQZsDFP8KBcI96hpGBYEYjciMsAyLXocMj1iaLJEYo5xOj12gB7FOXciObJwtekIT1cIGzdRKK5ehAEpcowCqKo_5l9Fp9VwerGj36P0x55HhjGhL9B9Q6vjGf9tKnW0K_U2x2sh76WiPr_C9AUZYAX5h1Da5Fves7Mbx18aXkQ1wmZLdMXK56wqN1JCK9F1vt5Xs5JZ6kp647aCd6ftANo4EGJ1IG76QmlvO9s9pR6QNrfnXhysLAgoPd2a5Fves7Mlsrz_f-U_mk2ED_JyHq3dTUO8G7xwdyPM8pqPLt3xJX8eKuJPMq3dOyJ34tfxk2Kj5..'  
-
-# WebSocket 配置
-WEBSOCKET_URL: 'wss://wss-goofish.dingtalk.com/'
-
-# 心跳包配置
-HEARTBEAT_INTERVAL: 15  # 心跳间隔，默认15秒
-HEARTBEAT_TIMEOUT: 5    # 心跳超时，默认5秒
-
-# Token 配置
-TOKEN_REFRESH_INTERVAL: 3600  # Token刷新间隔，默认1小时
-TOKEN_RETRY_INTERVAL: 300     # Token重试间隔，默认5分钟
-
-# 消息配置
-MESSAGE_EXPIRE_TIME: 300000  # 消息过期时间，默认5分钟
-
-# API 配置
 API_ENDPOINTS:
-  login_check: 'https://passport.goofish.com/newlogin/hasLogin.do'
-  token: 'https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/'
-  message_headinfo: 'https://h5api.m.goofish.com/h5/mtop.idle.trade.pc.message.headinfo/1.0/'
-
-# 请求头配置
-DEFAULT_HEADERS:
-  accept: 'application/json'
-  accept-language: 'zh-CN,zh;q=0.9'
-  cache-control: 'no-cache'
-  origin: 'https://www.goofish.com'
-  pragma: 'no-cache'
-  priority: 'u=1, i'
-  referer: 'https://www.goofish.com/'
-  sec-ch-ua: '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"'
-  sec-ch-ua-mobile: '?0'
-  sec-ch-ua-platform: '"Windows"'
-  sec-fetch-dest: 'empty'
-  sec-fetch-mode: 'cors'
-  sec-fetch-site: 'same-site'
-  user-agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
-
-# WebSocket 请求头配置
-WEBSOCKET_HEADERS:
-  Host: 'wss-goofish.dingtalk.com'
-  Connection: 'Upgrade'
-  Pragma: 'no-cache'
-  Cache-Control: 'no-cache'
-  User-Agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
-  Origin: 'https://www.goofish.com'
-  Accept-Encoding: 'gzip, deflate, br, zstd'
-  Accept-Language: 'zh-CN,zh;q=0.9'
-
-# 应用配置
+  login_check: https://passport.goofish.com/newlogin/hasLogin.do
+  message_headinfo: https://h5api.m.goofish.com/h5/mtop.idle.trade.pc.message.headinfo/1.0/
+  token: https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/
 APP_CONFIG:
-  app_key: '444e9908a51d1cb236a27862abc769c9'
   api_version: '1.0'
-  platform: 'web'
+  app_key: 444e9908a51d1cb236a27862abc769c9
   app_version: '1.0'
-
-# 自动回复配置
+  platform: web
 AUTO_REPLY:
+  default_message: 收到您的消息：{message}
   enabled: true
-  default_message: '收到您的消息：{message}'
   max_retry: 3
   retry_interval: 5
-
-# 人工接管配置
-MANUAL_MODE:
-  timeout: 3600  # 人工接管超时时间，默认1小时
-  toggle_keywords: ['。']  # 切换关键词，用逗号分隔
-
-# 日志配置
+COOKIES_STR: cna=ncu+IECOwmYCAXSUXXXgt5Rv; t=66e558997fe67e4703f998a279a23133; tracknick=xy246940070033; _hvn_lgc_=77; xlly_s=1; unb=2218021801256; havana_lgc2_77=eyJoaWQiOjIyMTgwMjE4MDEyNTYsInNnIjoiMWYwZDkzNzYxZTlmZDM4YzY0YzAwZGI3ODIyZDJkYzEiLCJzaXRlIjo3NywidG9rZW4iOiIxQ3NYQ0o5SmQ3MklQd2xBX0RzSDl1QSJ9; havana_lgc_exp=1751991164602; cookie2=11d0671df88ad558227555295a3450d6; _samesite_flag_=true; _tb_token_=318ee8eb13e43; sgcookie=E100Wu5XcYYjEx2phQet1QBuq9l0vU5P%2F08VJaU%2BV1Ua%2F4V3hGplDnhS%2FFPv7Ci36ZFdGG%2BdPvf7pr%2BgNJN4w3Al%2FQ9zK10IgXXMcnWYwmfVyoU%3D; csg=34eb3b98; sdkSilent=1749547362963; mtop_partitioned_detect=1; _m_h5_tk=a92aaf91a7d6043a597e8b549b302484_1749482842379; _m_h5_tk_enc=d74bd782182c0724769033a53866a802; tfstk=gojnCWa_lw8QuXP9WGtQuZyHlA49IHtWJ_nJw3dz7CRs9XndUbfl_sBKvgByZ_f919LdqTikUT57dQeQW96BV3PYMQqAd99-UD1Nxe-wbO9JUpz98pGiYePYMoET8A-utSC8UVGhjLOwLL8yLRvwhLxyUe-zICJkh4lFa_yM7pprLXJyLfkwFCRy435PQRvJ_p-y4bWILISPzGPOjn2YUMHjYd8Hg9RimOsMLuRQcBor4GvhIIXFu0oPjpYhbGMPSw8dztTfvTqofHBc7hJAdkmM09Jc9CC40cxNBO5JlNNSDF1GqEseJYuFIgAHuM8iemBDjL5yrNNmDpxdSEjhR8GNLsdhuH6-nWBMoNYXQFko8HQAHgTVYkcX6E9l9CC40cxwzgzs7q8Nv09aeGuSPeJ6IIKaBwIg2kTlHR2ilaTeCKAYIR0SkeJ6IFegIqNJ8d9IJ
+DEFAULT_HEADERS:
+  accept: application/json
+  accept-language: zh-CN,zh;q=0.9
+  cache-control: no-cache
+  origin: https://www.goofish.com
+  pragma: no-cache
+  priority: u=1, i
+  referer: https://www.goofish.com/
+  sec-ch-ua: '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"'
+  sec-ch-ua-mobile: ?0
+  sec-ch-ua-platform: '"Windows"'
+  sec-fetch-dest: empty
+  sec-fetch-mode: cors
+  sec-fetch-site: same-site
+  user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/133.0.0.0 Safari/537.36
+HEARTBEAT_INTERVAL: 15
+HEARTBEAT_TIMEOUT: 5
 LOG_CONFIG:
-  level: 'INFO'
-  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
-  rotation: '1 day'
-  retention: '7 days'
-  compression: 'zip' 
+  compression: zip
+  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level>
+    | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+  level: INFO
+  retention: 7 days
+  rotation: 1 day
+MANUAL_MODE:
+  timeout: 3600
+  toggle_keywords:
+  - 。
+MESSAGE_EXPIRE_TIME: 300000
+TOKEN_REFRESH_INTERVAL: 3600
+TOKEN_RETRY_INTERVAL: 300
+WEBSOCKET_HEADERS:
+  Accept-Encoding: gzip, deflate, br, zstd
+  Accept-Language: zh-CN,zh;q=0.9
+  Cache-Control: no-cache
+  Connection: Upgrade
+  Host: wss-goofish.dingtalk.com
+  Origin: https://www.goofish.com
+  Pragma: no-cache
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/133.0.0.0 Safari/537.36
+WEBSOCKET_URL: wss://wss-goofish.dingtalk.com/
