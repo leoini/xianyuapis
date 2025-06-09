@@ -3,6 +3,12 @@ import yaml
 from typing import Dict, Any
 
 class Config:
+    """配置管理类
+    
+    用于加载和管理全局配置文件(global_config.yml)。
+    支持配置的读取、修改和保存。
+    """
+    
     _instance = None
     _config = {}
 
@@ -13,7 +19,11 @@ class Config:
         return cls._instance
 
     def _load_config(self):
-        """加载配置文件"""
+        """加载配置文件
+        
+        从global_config.yml文件中加载配置信息。
+        如果文件不存在则抛出FileNotFoundError异常。
+        """
         config_path = os.path.join(os.path.dirname(__file__), 'global_config.yml')
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"配置文件不存在: {config_path}")
@@ -22,7 +32,15 @@ class Config:
             self._config = yaml.safe_load(f)
 
     def get(self, key: str, default: Any = None) -> Any:
-        """获取配置项"""
+        """获取配置项
+        
+        Args:
+            key: 配置项的键，支持点号分隔的多级键
+            default: 当配置项不存在时返回的默认值
+            
+        Returns:
+            配置项的值或默认值
+        """
         keys = key.split('.')
         value = self._config
         for k in keys:
@@ -35,7 +53,12 @@ class Config:
         return value
 
     def set(self, key: str, value: Any) -> None:
-        """设置配置项"""
+        """设置配置项
+        
+        Args:
+            key: 配置项的键，支持点号分隔的多级键
+            value: 要设置的值
+        """
         keys = key.split('.')
         config = self._config
         for k in keys[:-1]:
@@ -45,14 +68,21 @@ class Config:
         config[keys[-1]] = value
 
     def save(self) -> None:
-        """保存配置到文件"""
+        """保存配置到文件
+        
+        将当前配置保存回global_config.yml文件
+        """
         config_path = os.path.join(os.path.dirname(__file__), 'global_config.yml')
         with open(config_path, 'w', encoding='utf-8') as f:
             yaml.safe_dump(self._config, f, allow_unicode=True, default_flow_style=False)
 
     @property
     def config(self) -> Dict[str, Any]:
-        """获取完整配置"""
+        """获取完整配置
+        
+        Returns:
+            包含所有配置项的字典
+        """
         return self._config
 
 # 创建全局配置实例
@@ -70,6 +100,14 @@ API_ENDPOINTS = config.get('API_ENDPOINTS', {})
 DEFAULT_HEADERS = config.get('DEFAULT_HEADERS', {})
 WEBSOCKET_HEADERS = config.get('WEBSOCKET_HEADERS', {})
 APP_CONFIG = config.get('APP_CONFIG', {})
-AUTO_REPLY = config.get('AUTO_REPLY', {})
+AUTO_REPLY = config.get('AUTO_REPLY', {
+    'enabled': True,
+    'default_message': '亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~',
+    'api': {
+        'enabled': False,
+        'url': 'http://localhost:8080/api/sendMsg',
+        'timeout': 10
+    }
+})
 MANUAL_MODE = config.get('MANUAL_MODE', {})
 LOG_CONFIG = config.get('LOG_CONFIG', {}) 

@@ -18,6 +18,7 @@ from config import (
 from utils.message_utils import format_message, format_system_message
 from utils.ws_utils import WebSocketClient
 import sys
+import aiohttp
 
 # 日志配置
 log_dir = 'logs'
@@ -76,6 +77,7 @@ class XianyuLive:
         self.manual_mode_timeout = MANUAL_MODE.get('timeout', 3600)  # 人工接管超时时间，默认1小时
         self.manual_mode_timestamps = {}  # 记录进入人工模式的时间
         self.toggle_keywords = MANUAL_MODE.get('toggle_keywords', ['。'])  # 切换关键词
+        self.session = None  # 用于API调用的aiohttp session
 
     def check_toggle_keywords(self, message):
         """检查消息是否包含切换关键词"""
@@ -145,7 +147,6 @@ class XianyuLive:
             headers = DEFAULT_HEADERS.copy()
             headers['cookie'] = self.cookies_str
             
-            import aiohttp
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     API_ENDPOINTS.get('token'),
@@ -437,6 +438,56 @@ class XianyuLive:
         except Exception:
             return False
 
+    async def create_session(self):
+        """创建aiohttp session"""
+        if not self.session:
+            self.session = aiohttp.ClientSession()
+
+    async def close_session(self):
+        """关闭aiohttp session"""
+        if self.session:
+            await self.session.close()
+            self.session = None
+
+    async def get_api_reply(self, msg_time, user_url, send_user_id, send_user_name, item_id, send_message, chat_id):
+        """调用API获取回复消息"""
+        try:
+            if not self.session:
+                await self.create_session()
+
+            api_config = AUTO_REPLY.get('api', {})
+            timeout = aiohttp.ClientTimeout(total=api_config.get('timeout', 10))
+            
+            payload = {
+                "msg_time": msg_time,
+                "user_url": user_url,
+                "send_user_id": send_user_id,
+                "send_user_name": send_user_name,
+                "item_id": item_id,
+                "send_message": send_message,
+                "chat_id": chat_id
+            }
+            
+            async with self.session.post(
+                api_config.get('url', 'http://localhost:8080/api/sendMsg'),
+                json=payload,
+                timeout=timeout
+            ) as response:
+                result = await response.json()
+                
+                if result.get('code') == '200':
+                    return result.get('data', {}).get('sednMsg')
+                else:
+                    logger.warning(f"API返回错误: {result.get('msg', '未知错误')}")
+                    return None
+                    
+        except asyncio.TimeoutError:
+            logger.error("API调用超时")
+            return None
+        except Exception as e:
+            logger.error(f"调用API出错: {str(e)}")
+            return None
+
     async def handle_message(self, message_data, websocket):
         """处理所有类型的消息"""
         try:
@@ -563,16 +614,32 @@ class XianyuLive:
             if not AUTO_REPLY.get('enabled', True):
                 logger.info(f"[{msg_time}] 【系统】自动回复已禁用")
                 return
+
+            # 构造用户URL
+            user_url = f'https://www.goofish.com/personal?userId={send_user_id}'
                 
-            reply = AUTO_REPLY.get('default_message', '收到您的消息').format(
-                send_user_id=send_user_id,
-                send_user_name=send_user_name,
-                send_message=send_message
-            )
+            reply = None
+            # 判断是否启用API回复
+            if AUTO_REPLY.get('api', {}).get('enabled', False):
+                reply = await self.get_api_reply(
+                    msg_time, user_url, send_user_id, send_user_name,
+                    item_id, send_message, chat_id
+                )
+                if not reply:
+                    logger.error(f"[{msg_time}] 【API调用失败】用户: {send_user_name} (ID: {send_user_id}), 商品({item_id}): {send_message}")
+                
+            # 如果API回复失败或未启用API，使用默认回复
+            if not reply:
+                reply = AUTO_REPLY.get('default_message', '收到您的消息').format(
+                    send_user_id=send_user_id,
+                    send_user_name=send_user_name,
+                    send_message=send_message
+                )
+                
             await self.send_msg(websocket, chat_id, send_user_id, reply)
             # 记录发出的消息
             msg_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            logger.info(f"[{msg_time}] 【自动发出】用户: {send_user_name} (ID: {send_user_id}), 商品({item_id}): {reply}")
+            logger.info(f"[{msg_time}] 【{'API' if AUTO_REPLY.get('api', {}).get('enabled', False) else '默认'}发出】用户: {send_user_name} (ID: {send_user_id}), 商品({item_id}): {reply}")
             
         except Exception as e:
             logger.error(f"处理消息时发生错误: {str(e)}")
@@ -580,47 +647,51 @@ class XianyuLive:
 
     async def main(self):
         """主程序入口"""
-        while True:
-            try:
-                headers = WEBSOCKET_HEADERS.copy()
-                headers['Cookie'] = self.cookies_str
-                
-                async with websockets.connect(
-                    self.base_url,
-                    additional_headers=headers
-                ) as websocket:
-                    self.ws = websocket
-                    await self.init(websocket)
-
-                    # 启动心跳任务
-                    self.heartbeat_task = asyncio.create_task(self.heartbeat_loop(websocket))
+        try:
+            await self.create_session()  # 创建session
+            while True:
+                try:
+                    headers = WEBSOCKET_HEADERS.copy()
+                    headers['Cookie'] = self.cookies_str
                     
-                    # 启动token刷新任务
-                    self.token_refresh_task = asyncio.create_task(self.token_refresh_loop())
+                    async with websockets.connect(
+                        self.base_url,
+                        additional_headers=headers
+                    ) as websocket:
+                        self.ws = websocket
+                        await self.init(websocket)
 
-                    async for message in websocket:
-                        try:
-                            message_data = json.loads(message)
-                            
-                            # 处理心跳响应
-                            if await self.handle_heartbeat_response(message_data):
-                                continue
+                        # 启动心跳任务
+                        self.heartbeat_task = asyncio.create_task(self.heartbeat_loop(websocket))
+                        
+                        # 启动token刷新任务
+                        self.token_refresh_task = asyncio.create_task(self.token_refresh_loop())
+
+                        async for message in websocket:
+                            try:
+                                message_data = json.loads(message)
                                 
-                            # 处理其他消息
-                            await self.handle_message(message_data, websocket)
-                            
-                        except Exception as e:
-                            logger.error(f"处理消息出错: {e}")
-                            continue
+                                # 处理心跳响应
+                                if await self.handle_heartbeat_response(message_data):
+                                    continue
+                                    
+                                # 处理其他消息
+                                await self.handle_message(message_data, websocket)
+                                
+                            except Exception as e:
+                                logger.error(f"处理消息出错: {e}")
+                                continue
 
-            except Exception as e:
-                logger.error(f"WebSocket连接异常: {e}")
-                if self.heartbeat_task:
-                    self.heartbeat_task.cancel()
-                if self.token_refresh_task:
-                    self.token_refresh_task.cancel()
-                await asyncio.sleep(5)  # 等待5秒后重试
-                continue
+                except Exception as e:
+                    logger.error(f"WebSocket连接异常: {e}")
+                    if self.heartbeat_task:
+                        self.heartbeat_task.cancel()
+                    if self.token_refresh_task:
+                        self.token_refresh_task.cancel()
+                    await asyncio.sleep(5)  # 等待5秒后重试
+                    continue
+        finally:
+            await self.close_session()  # 确保关闭session
 
 if __name__ == '__main__':
     cookies_str = os.getenv('COOKIES_STR')
