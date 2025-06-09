@@ -12,7 +12,8 @@ from utils.xianyu_utils import (
 from config import (
     WEBSOCKET_URL, HEARTBEAT_INTERVAL, HEARTBEAT_TIMEOUT,
     TOKEN_REFRESH_INTERVAL, TOKEN_RETRY_INTERVAL, config, COOKIES_STR,
-    MANUAL_MODE, LOG_CONFIG
+    MANUAL_MODE, LOG_CONFIG, AUTO_REPLY, DEFAULT_HEADERS, WEBSOCKET_HEADERS,
+    APP_CONFIG, API_ENDPOINTS
 )
 from utils.message_utils import format_message, format_system_message
 from utils.ws_utils import WebSocketClient
@@ -141,28 +142,13 @@ class XianyuLive:
             params['sign'] = sign
             
             # 发送请求
-            headers = {
-                'accept': 'application/json',
-                'accept-language': 'zh-CN,zh;q=0.9',
-                'cache-control': 'no-cache',
-                'origin': 'https://www.goofish.com',
-                'pragma': 'no-cache',
-                'priority': 'u=1, i',
-                'referer': 'https://www.goofish.com/',
-                'sec-ch-ua': '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': '"Windows"',
-                'sec-fetch-dest': 'empty',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-site': 'same-site',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-                'cookie': self.cookies_str
-            }
+            headers = DEFAULT_HEADERS.copy()
+            headers['cookie'] = self.cookies_str
             
             import aiohttp
             async with aiohttp.ClientSession() as session:
                 async with session.post(
-                    'https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/',
+                    API_ENDPOINTS.get('token'),
                     params=params,
                     data=data,
                     headers=headers
@@ -330,7 +316,7 @@ class XianyuLive:
             "lwp": "/reg",
             "headers": {
                 "cache-header": "app-key token ua wv",
-                "app-key": "444e9908a51d1cb236a27862abc769c9",
+                "app-key": APP_CONFIG.get('app_key'),
                 "token": self.current_token,
                 "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 DingTalk(2.1.5) OS(Windows/10) Browser(Chrome/133.0.0.0) DingWeb/2.1.5 IMPaaS DingWeb/2.1.5",
                 "dt": "j",
@@ -574,7 +560,15 @@ class XianyuLive:
                 return
 
             # 自动回复消息
-            reply = f'收到您的消息：{send_message}'
+            if not AUTO_REPLY.get('enabled', True):
+                logger.info(f"[{msg_time}] 【系统】自动回复已禁用")
+                return
+                
+            reply = AUTO_REPLY.get('default_message', '收到您的消息').format(
+                send_user_id=send_user_id,
+                send_user_name=send_user_name,
+                send_message=send_message
+            )
             await self.send_msg(websocket, chat_id, send_user_id, reply)
             # 记录发出的消息
             msg_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -588,17 +582,8 @@ class XianyuLive:
         """主程序入口"""
         while True:
             try:
-                headers = {
-                    "Cookie": self.cookies_str,
-                    "Host": "wss-goofish.dingtalk.com",
-                    "Connection": "Upgrade",
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
-                    "Origin": "https://www.goofish.com",
-                    "Accept-Encoding": "gzip, deflate, br, zstd",
-                    "Accept-Language": "zh-CN,zh;q=0.9",
-                }
+                headers = WEBSOCKET_HEADERS.copy()
+                headers['Cookie'] = self.cookies_str
                 
                 async with websockets.connect(
                     self.base_url,
