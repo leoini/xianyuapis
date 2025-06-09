@@ -147,6 +147,23 @@ class XianyuLive:
                 ) as response:
                     res_json = await response.json()
                     
+                    # 检查并更新Cookie
+                    if 'set-cookie' in response.headers:
+                        new_cookies = {}
+                        for cookie in response.headers.getall('set-cookie', []):
+                            if '=' in cookie:
+                                name, value = cookie.split(';')[0].split('=', 1)
+                                new_cookies[name.strip()] = value.strip()
+                        
+                        # 更新cookies
+                        if new_cookies:
+                            self.cookies.update(new_cookies)
+                            # 生成新的cookie字符串
+                            self.cookies_str = '; '.join([f"{k}={v}" for k, v in self.cookies.items()])
+                            # 更新配置文件
+                            await self.update_config_cookies()
+                            logger.debug("已更新Cookie到配置文件")
+                    
                     if isinstance(res_json, dict):
                         ret_value = res_json.get('ret', [])
                         # 检查ret是否包含成功信息
@@ -164,6 +181,26 @@ class XianyuLive:
         except Exception as e:
             logger.error(f"Token刷新异常: {str(e)}")
             return None
+
+    async def update_config_cookies(self):
+        """更新配置文件中的cookies"""
+        try:
+            import yaml
+            config_path = 'global_config.yml'
+            
+            # 读取当前配置
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+            
+            # 更新cookies
+            config['COOKIES_STR'] = self.cookies_str
+            
+            # 写回配置文件
+            with open(config_path, 'w', encoding='utf-8') as f:
+                yaml.safe_dump(config, f, allow_unicode=True)
+                
+        except Exception as e:
+            logger.error(f"更新配置文件失败: {str(e)}")
 
     async def token_refresh_loop(self):
         """Token刷新循环"""
