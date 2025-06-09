@@ -542,13 +542,13 @@ class XianyuLive:
                             content = data['operation']['content']
                             if 'sessionArouse' in content:
                                 # 处理系统引导消息
-                                logger.info(f"【系统】[{msg_time}] 小闲鱼智能提示:")
+                                logger.info(f"[{msg_time}] 【系统】小闲鱼智能提示:")
                                 if 'arouseChatScriptInfo' in content['sessionArouse']:
                                     for qa in content['sessionArouse']['arouseChatScriptInfo']:
                                         logger.info(f"  - {qa['chatScrip']}")
                             elif 'contentType' in content:
                                 # 其他类型的未加密消息
-                                logger.debug(f"【系统】[{msg_time}] 其他类型消息: {content}")
+                                logger.debug(f"[{msg_time}] 【系统】其他类型消息: {content}")
                     return
                 except Exception as e:
                     decrypted_data = decrypt(data)
@@ -563,17 +563,17 @@ class XianyuLive:
                 if message['3']['redReminder'] == '等待买家付款':
                     user_id = message['1'].split('@')[0]
                     user_url = f'https://www.goofish.com/personal?userId={user_id}'
-                    logger.info(f'【系统】[{msg_time}] 等待买家 {user_url} 付款')
+                    logger.info(f'[{msg_time}] 【系统】等待买家 {user_url} 付款')
                     return
                 elif message['3']['redReminder'] == '交易关闭':
                     user_id = message['1'].split('@')[0]
                     user_url = f'https://www.goofish.com/personal?userId={user_id}'
-                    logger.info(f'【系统】[{msg_time}] 买家 {user_url} 交易关闭')
+                    logger.info(f'[{msg_time}] 【系统】买家 {user_url} 交易关闭')
                     return
                 elif message['3']['redReminder'] == '等待卖家发货':
                     user_id = message['1'].split('@')[0]
                     user_url = f'https://www.goofish.com/personal?userId={user_id}'
-                    logger.info(f'【系统】[{msg_time}] 交易成功 {user_url} 等待卖家发货')
+                    logger.info(f'[{msg_time}] 【系统】交易成功 {user_url} 等待卖家发货')
                     return
             except:
                 pass
