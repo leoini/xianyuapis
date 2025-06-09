@@ -22,7 +22,7 @@ AUTO_REPLY:
   retry_interval: 5  # 重试间隔（秒）
   api:
     enabled: true  # 是否启用API回复
-    url: 'http://localhost:8080/api/sendMsg'  # API地址
+    url: 'http://localhost:8080/xianyu/reply'  # API地址
     timeout: 10  # API超时时间（秒）
 
 # Cookie配置

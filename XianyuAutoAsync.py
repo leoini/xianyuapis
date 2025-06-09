@@ -475,14 +475,25 @@ class XianyuLive:
             }
             
             async with self.session.post(
-                api_config.get('url', 'http://localhost:8080/api/sendMsg'),
+                api_config.get('url', 'http://localhost:8080/xianyu/reply'),
                 json=payload,
                 timeout=timeout
             ) as response:
                 result = await response.json()
                 
-                if result.get('code') == '200':
-                    return result.get('data', {}).get('sednMsg')
+                # 将code转换为字符串进行比较，或者直接用数字比较
+                if str(result.get('code')) == '200' or result.get('code') == 200:
+                    send_msg = result.get('data', {}).get('send_msg')
+                    if send_msg:
+                        # 格式化消息中的占位符
+                        return send_msg.format(
+                            send_user_id=payload['send_user_id'],
+                            send_user_name=payload['send_user_name'],
+                            send_message=payload['send_message']
+                        )
+                    else:
+                        logger.warning("API返回成功但无回复消息")
+                        return None
                 else:
                     logger.warning(f"API返回错误: {result.get('msg', '未知错误')}")
                     return None
