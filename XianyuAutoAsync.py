@@ -195,18 +195,24 @@ class XianyuLive:
         """更新配置文件中的cookies"""
         try:
             import yaml
+            from datetime import datetime
             config_path = 'global_config.yml'
             
             # 读取当前配置
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
             
-            # 更新cookies
-            config['COOKIES_STR'] = self.cookies_str
+            # 更新cookies和更新时间
+            if 'COOKIES' not in config:
+                config['COOKIES'] = {}
+            config['COOKIES']['value'] = self.cookies_str
+            config['COOKIES']['last_update_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             
             # 写回配置文件
             with open(config_path, 'w', encoding='utf-8') as f:
                 yaml.safe_dump(config, f, allow_unicode=True)
+                
+            logger.debug("已更新Cookie到配置文件")
                 
         except Exception as e:
             logger.error(f"更新配置文件失败: {str(e)}")
