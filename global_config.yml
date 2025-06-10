@@ -1,41 +1,24 @@
-# API接口配置
 API_ENDPOINTS:
-  # 登录检查接口
   login_check: https://passport.goofish.com/newlogin/hasLogin.do
-  # 消息头信息接口
   message_headinfo: https://h5api.m.goofish.com/h5/mtop.idle.trade.pc.message.headinfo/1.0/
-  # Token获取接口
   token: https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/
-
-# 应用程序配置
 APP_CONFIG:
-  api_version: '1.0'  # API版本号
-  app_key: 444e9908a51d1cb236a27862abc769c9  # 应用密钥
-  app_version: '1.0'  # 应用版本号
-  platform: web  # 平台标识
-
-# 自动回复配置
+  api_version: '1.0'
+  app_key: 444e9908a51d1cb236a27862abc769c9
+  app_version: '1.0'
+  platform: web
 AUTO_REPLY:
-  enabled: true  # 是否启用自动回复
-  default_message: 亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~  # 默认回复消息
-  max_retry: 3  # 最大重试次数
-  retry_interval: 5  # 重试间隔（秒）
   api:
-    enabled: true  # 是否启用API回复
-    url: 'http://localhost:8080/xianyu/reply'  # API地址
-    timeout: 10  # API超时时间（秒）
-
-# Cookie配置
+    enabled: true
+    timeout: 10
+    url: http://localhost:8080/xianyu/reply
+  default_message: 亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~
+  enabled: true
+  max_retry: 3
+  retry_interval: 5
 COOKIES:
-  value: cna=ncu+IECOwmYCAXSUXXXgt5Rv; t=66e558997fe67e4703f998a279a23133; tracknick=xy246940070033;
-    _hvn_lgc_=77; xlly_s=1; unb=2218021801256; havana_lgc2_77=eyJoaWQiOjIyMTgwMjE4MDEyNTYsInNnIjoiMWYwZDkzNzYxZTlmZDM4YzY0YzAwZGI3ODIyZDJkYzEiLCJzaXRlIjo3NywidG9rZW4iOiIxQ3NYQ0o5SmQ3MklQd2xBX0RzSDl1QSJ9;
-    havana_lgc_exp=1751991164602; cookie2=11d0671df88ad558227555295a3450d6; _samesite_flag_=true;
-    _tb_token_=318ee8eb13e43; sgcookie=E100Wu5XcYYjEx2phQet1QBuq9l0vU5P%2F08VJaU%2BV1Ua%2F4V3hGplDnhS%2FFPv7Ci36ZFdGG%2BdPvf7pr%2BgNJN4w3Al%2FQ9zK10IgXXMcnWYwmfVyoU%3D;
-    csg=34eb3b98; sdkSilent=1749547362963; mtop_partitioned_detect=1; _m_h5_tk=fc282f96663871403f1e75fd05eede3a_1749494354686;
-    _m_h5_tk_enc=7072868585015ec34ae4598ef8b688a0; tfstk=gojnCWa_lw8QuXP9WGtQuZyHlA49IHtWJ_nJw3dz7CRs9XndUbfl_sBKvgByZ_f919LdqTikUT57dQeQW96BV3PYMQqAd99-UD1Nxe-wbO9JUpz98pGiYePYMoET8A-utSC8UVGhjLOwLL8yLRvwhLxyUe-zICJkh4lFa_yM7pprLXJyLfkwFCRy435PQRvJ_p-y4bWILISPzGPOjn2YUMHjYd8Hg9RimOsMLuRQcBor4GvhIIXFu0oPjpYhbGMPSw8dztTfvTqofHBc7hJAdkmM09Jc9CC40cxNBO5JlNNSDF1GqEseJYuFIgAHuM8iemBDjL5yrNNmDpxdSEjhR8GNLsdhuH6-nWBMoNYXQFko8HQAHgTVYkcX6E9l9CC40cxwzgzs7q8Nv09aeGuSPeJ6IIKaBwIg2kTlHR2ilaTeCKAYIR0SkeJ6IFegIqNJ8d9IJ  # Cookie值
-  last_update_time: '2024-03-21 10:30:00'  # Cookie最后更新时间
-
-# 默认HTTP请求头
+  last_update_time: '2025-06-10 14:26:16'
+  value: #填你的Cookie
 DEFAULT_HEADERS:
   accept: application/json
   accept-language: zh-CN,zh;q=0.9
@@ -52,36 +35,22 @@ DEFAULT_HEADERS:
   sec-fetch-site: same-site
   user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
     like Gecko) Chrome/133.0.0.0 Safari/537.36
-
-# 心跳配置
-HEARTBEAT_INTERVAL: 15  # 心跳包发送间隔（秒）
-HEARTBEAT_TIMEOUT: 5    # 心跳超时时间（秒）
-
-# 日志配置
+HEARTBEAT_INTERVAL: 15
+HEARTBEAT_TIMEOUT: 5
 LOG_CONFIG:
-  compression: zip  # 日志压缩格式
-  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'  # 日志格式
-  level: INFO  # 日志级别
-  retention: 7 days  # 日志保留时间
-  rotation: 1 day  # 日志轮转周期
-
-# 人工接管模式配置
+  compression: zip
+  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level>
+    | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+  level: INFO
+  retention: 7 days
+  rotation: 1 day
 MANUAL_MODE:
-  timeout: 3600  # 人工接管超时时间（秒）
-  toggle_keywords:  # 切换人工接管的关键词
-    - 。
-
-# 消息相关配置
-MESSAGE_EXPIRE_TIME: 300000  # 消息过期时间（毫秒）
-
-# Token相关配置
-TOKEN_REFRESH_INTERVAL: 3600  # Token刷新间隔（秒）
-TOKEN_RETRY_INTERVAL: 300    # Token重试间隔（秒）
-
-# WebSocket配置
-WEBSOCKET_URL: wss://wss-goofish.dingtalk.com/  # WebSocket服务器地址
-
-# WebSocket连接头
+  timeout: 3600
+  toggle_keywords:
+  - 。
+MESSAGE_EXPIRE_TIME: 300000
+TOKEN_REFRESH_INTERVAL: 3600
+TOKEN_RETRY_INTERVAL: 300
 WEBSOCKET_HEADERS:
   Accept-Encoding: gzip, deflate, br, zstd
   Accept-Language: zh-CN,zh;q=0.9
@@ -92,3 +61,4 @@ WEBSOCKET_HEADERS:
   Pragma: no-cache
   User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
     like Gecko) Chrome/133.0.0.0 Safari/537.36
+WEBSOCKET_URL: wss://wss-goofish.dingtalk.com/
