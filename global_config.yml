@@ -1,24 +1,36 @@
+# 闲鱼API接口配置
 API_ENDPOINTS:
+  # 登录状态检查接口
   login_check: https://passport.goofish.com/newlogin/hasLogin.do
+  # 消息头部信息接口
   message_headinfo: https://h5api.m.goofish.com/h5/mtop.idle.trade.pc.message.headinfo/1.0/
+  # Token获取接口
   token: https://h5api.m.goofish.com/h5/mtop.taobao.idlemessage.pc.login.token/1.0/
+
+# 应用配置
 APP_CONFIG:
-  api_version: '1.0'
-  app_key: 444e9908a51d1cb236a27862abc769c9
-  app_version: '1.0'
-  platform: web
+  api_version: '1.0'  # API版本
+  app_key: 444e9908a51d1cb236a27862abc769c9  # 应用密钥
+  app_version: '1.0'  # 应用版本
+  platform: web  # 平台类型
+
+# 自动回复配置
 AUTO_REPLY:
   api:
-    enabled: true
-    timeout: 10
-    url: http://localhost:8080/xianyu/reply
-  default_message: 亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~
-  enabled: true
-  max_retry: 3
-  retry_interval: 5
+    enabled: false  # 是否启用API自动回复
+    timeout: 10     # API请求超时时间（秒）
+    url: http://localhost:8080/xianyu/reply  # 自动回复API地址
+  default_message: 亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~  # 默认回复消息
+  enabled: true  # 是否启用自动回复
+  max_retry: 3  # 最大重试次数
+  retry_interval: 5  # 重试间隔（秒）
+
+# Cookie配置
 COOKIES:
-  last_update_time: '2025-06-10 14:26:16'
-  value: #填你的Cookie
+  last_update_time: '2025-06-10 14:26:16'  # Cookie最后更新时间
+  value:  #登录闲鱼网页版，填你的Cookie
+
+# 默认请求头配置
 DEFAULT_HEADERS:
   accept: application/json
   accept-language: zh-CN,zh;q=0.9
@@ -33,24 +45,34 @@ DEFAULT_HEADERS:
   sec-fetch-dest: empty
   sec-fetch-mode: cors
   sec-fetch-site: same-site
-  user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
-    like Gecko) Chrome/133.0.0.0 Safari/537.36
-HEARTBEAT_INTERVAL: 15
-HEARTBEAT_TIMEOUT: 5
+  user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+
+# WebSocket心跳配置
+HEARTBEAT_INTERVAL: 15  # 心跳间隔（秒）
+HEARTBEAT_TIMEOUT: 5   # 心跳超时时间（秒）
+
+# 日志配置
 LOG_CONFIG:
-  compression: zip
-  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level>
-    | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
-  level: INFO
-  retention: 7 days
-  rotation: 1 day
+  compression: zip  # 日志压缩格式
+  format: '<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'  # 日志格式
+  level: INFO  # 日志级别
+  retention: 7 days  # 日志保留时间
+  rotation: 1 day  # 日志轮转周期
+
+# 人工接管模式配置
 MANUAL_MODE:
-  timeout: 3600
-  toggle_keywords:
+  timeout: 3600  # 人工接管超时时间（秒）
+  toggle_keywords:  # 触发人工接管的关键词
   - 。
+
+# 消息过期时间（毫秒）
 MESSAGE_EXPIRE_TIME: 300000
-TOKEN_REFRESH_INTERVAL: 3600
-TOKEN_RETRY_INTERVAL: 300
+
+# Token刷新配置
+TOKEN_REFRESH_INTERVAL: 3600  # Token刷新间隔（秒）
+TOKEN_RETRY_INTERVAL: 300     # Token重试间隔（秒）
+
+# WebSocket请求头配置
 WEBSOCKET_HEADERS:
   Accept-Encoding: gzip, deflate, br, zstd
   Accept-Language: zh-CN,zh;q=0.9
@@ -59,6 +81,7 @@ WEBSOCKET_HEADERS:
   Host: wss-goofish.dingtalk.com
   Origin: https://www.goofish.com
   Pragma: no-cache
-  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
-    like Gecko) Chrome/133.0.0.0 Safari/537.36
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36
+
+# WebSocket连接地址
 WEBSOCKET_URL: wss://wss-goofish.dingtalk.com/

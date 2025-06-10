@@ -10,10 +10,7 @@
 
 - 支持闲鱼商品自动发货
 - 订单状态实时监控
-- 智能消息回复系统
-  - 支持对接 ChatGPT、文心一言等大语言模型
-  - 自定义回复规则和模板
-  - 多轮对话上下文管理
+- 支持自定义消息回复系统
 - 基于 `asyncio` 的异步架构
 - 完善的日志系统
 
@@ -54,7 +51,8 @@ python Start.py
 `POST http://localhost:8080/xianyu/reply`
 
 #### 接口说明
-需要实现这个接口，本项目会调用这个接口获取自动回复的内容并发送给客户
+你需要实现这个接口，本项目会调用这个接口获取自动回复的内容并发送给客户
+不实现这个接口也没关系，系统会默认回复，你也可以配置默认回复的内容
 用于处理闲鱼消息的自动回复，支持对接大语言模型进行智能回复。
 
 #### 请求参数
@@ -107,18 +105,22 @@ AUTO_REPLY:
 - 定期检查日志文件，及时处理异常情况
 - 使用大模型时注意 API 调用频率和成本控制
 
-## 🤝 贡献指南
-1. Fork 本仓库
-2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启一个 Pull Request
+## 📝 效果
 
-## 📝 开源协议
-本项目采用 MIT 协议 - 详见 [LICENSE](LICENSE) 文件
 
-## 🙏 致谢
-感谢所有为本项目提供帮助和建议的开发者们！
+![image-20250611004531745](https://typeropic.oss-cn-beijing.aliyuncs.com/cp/image-20250611004531745.png)
+
+![image-20250611004549662](https://typeropic.oss-cn-beijing.aliyuncs.com/cp/image-20250611004549662.png)
+
+## 🧸特别鸣谢
+
+本项目参考了以下开源项目： https://github.com/cv-cat/XianYuApis
+
+感谢[@CVcat](https://github.com/cv-cat)的技术支持
 
 ## 📞 联系方式
 如有问题或建议，欢迎提交 Issue 或 Pull Request。
+
+## 技术交流
+
+![image-20250611004141387](https://typeropic.oss-cn-beijing.aliyuncs.com/cp/image-20250611004141387.png)
