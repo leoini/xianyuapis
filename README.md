@@ -1,4 +1,4 @@
-# 🐟 XianYuAutoDeliveryX - 闲鱼自动发货系统
+# 🐟 XianYuAutoDeliveryX - 闲鱼虚拟商品商自动发货&聊天对接大模型
 
 [![Python Version](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -55,6 +55,7 @@ python Start.py
 不实现这个接口也没关系，系统会默认回复，你也可以配置默认回复的内容
 用于处理闲鱼消息的自动回复，支持对接大语言模型进行智能回复。
 
+**通过这个接口可以检测到用户是否已付款，然后回复虚拟资料内容即可**
 #### 请求参数
 ```json
 {
