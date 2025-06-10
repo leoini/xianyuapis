@@ -3,7 +3,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.7%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**✨ 基于闲鱼API的自动发货系统，支持商品自动发货、订单管理、消息通知等功能。**
+**✨ 基于闲鱼API的自动发货系统，支持商品自动发货、消息自动回复等功能。**
 **⚠️ 注意：本项目仅供学习交流使用，请勿用于商业用途。**
 
 ## 🌟 核心特性
